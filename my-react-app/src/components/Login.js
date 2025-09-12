@@ -1,6 +1,16 @@
+
 import React, { useState } from "react";
 import api from "../services/api";
 import { saveToken } from "../services/auth";
+import {
+  Container,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Alert
+} from "@mui/material";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -15,30 +25,56 @@ export default function Login() {
       saveToken(response.data);
       alert("Login successful!");
       // Redirect or load protected page
+      window.location.href = "/devices";
+      //
+      Navigator.push("/devices");
     } catch (err) {
       setError("Invalid credentials");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Login</h2>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={e => setUsername(e.target.value)}
-        required
-      /><br/>
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-        required
-      /><br/>
-      <button type="submit">Login</button>
-      {error && <p style={{color:"red"}}>{error}</p>}
-    </form>
+    <Container maxWidth="xs">
+      <Box mt={8}>
+        <Paper elevation={3} sx={{ p: 4 }}>
+          <Typography variant="h4" align="center" gutterBottom>
+            Login
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              label="Username"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              required
+            />
+            <TextField
+              label="Password"
+              type="password"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ mt: 2 }}
+            >
+              Login
+            </Button>
+            {error && (
+              <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>
+            )}
+          </form>
+        </Paper>
+      </Box>
+    </Container>
   );
 }
